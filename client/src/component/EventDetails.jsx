@@ -2,20 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import {useAuth} from '../Context/AuthContext'
 
 const EventDetails = () => {
+  const {url}=useAuth()
   const navigate=useNavigate()
   const { id } = useParams(); // Get event ID from URL
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [attending, setAttending] = useState(false);
+  
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/auth/event/${id}`
+          `${url}/auth/event/${id}`
         );
         setEvent(response.data);
       } catch (err) {
@@ -37,7 +40,7 @@ const EventDetails = () => {
       }
 
       const res = await axios.post(
-        `http://localhost:5000/auth/event/${id}/attend`,
+        `${url}/auth/event/${id}/attend`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
